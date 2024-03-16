@@ -6,28 +6,26 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import net.fruchtiii.onehit.main.Main;
 
 public class ScoreboardManager {
 
-	public static void createNewScoreboard(Player player) {
+	PlayerStats stats;
+
+	private String firstPlaceName = "name";
+	private String secondPlaceName = "name";
+	private String thirdPlaceName = "name";
+
+	private int firstPlaceKills = 0;
+	private int secondPlaceKills = 0;
+	private int thirdPlaceKills = 0;
+
+	public void createNewScoreboard(Player player) {
+		stats = Main.getPlugin().getStatsManager().getStats(player.getUniqueId());
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective objective = scoreboard.registerNewObjective("Scoreboard", "dummy");
-
-		String firstPlaceName = "name";
-		String secondPlaceName = "name";
-		String thirdPlaceName = "name";
-
-		int firstPlaceKills = 0;
-		int secondPlaceKills = 0;
-		int thirdPlaceKills = 0;
-
-		PlayerStats stats = Main.getPlugin().getStatsManager().getStats(player.getUniqueId());
-
-		int ownKills = stats.getKills();
-		int ownStreak = 0;
-		int ownDeaths = stats.getDeaths();
 
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		objective.setDisplayName("      §9§lONEHIT     ");
@@ -45,22 +43,57 @@ public class ScoreboardManager {
 				.getScore(ChatColor.DARK_GRAY + "§8» " + ChatColor.GOLD + "[" + thirdPlaceKills + "] " + thirdPlaceName)
 				.setScore(9);
 		objective.getScore("   ").setScore(8);
-		objective.getScore(ChatColor.GOLD + "Your Kills:").setScore(6);
-		objective.getScore(ChatColor.GREEN + "§8» §e" + ownKills).setScore(6);
+		objective.getScore(ChatColor.GOLD + "Your Kills:").setScore(7);
 		objective.getScore("  ").setScore(5);
 		objective.getScore(ChatColor.GOLD + "Your Streak:").setScore(4);
-		objective.getScore(ChatColor.BLUE + "§8» §e" + ownStreak).setScore(3);
 		objective.getScore(" ").setScore(2);
 		objective.getScore(ChatColor.GOLD + "Your Deaths:").setScore(1);
-		objective.getScore(ChatColor.RED + "§8» §e" + ownDeaths).setScore(0);
+
+		Team personalKillCount = scoreboard.registerNewTeam("kills");
+		String killkey = ChatColor.BLACK.toString();
+
+		personalKillCount.addEntry(killkey);
+		personalKillCount.setPrefix(ChatColor.BLACK + "§8» ");
+		personalKillCount.setSuffix(ChatColor.YELLOW + Integer.toString(stats.getKills()));
+		objective.getScore(killkey).setScore(6);
+
+		Team personalStreakCount = scoreboard.registerNewTeam("streak");
+		String streakkey = ChatColor.RED.toString();
+
+		personalStreakCount.addEntry(streakkey);
+		personalStreakCount.setPrefix(ChatColor.RED + "§8» ");
+		personalStreakCount.setSuffix(ChatColor.YELLOW + Integer.toString(stats.getStreak()));
+		objective.getScore(streakkey).setScore(3);
+
+		Team personalDeathCount = scoreboard.registerNewTeam("deaths");
+		String deathkey = ChatColor.GOLD.toString();
+
+		personalDeathCount.addEntry(deathkey);
+		personalDeathCount.setPrefix(ChatColor.YELLOW + "§8» ");
+		personalDeathCount.setSuffix(ChatColor.YELLOW + Integer.toString(stats.getDeaths()));
+		objective.getScore(deathkey).setScore(0);
 
 		player.setScoreboard(scoreboard);
 	}
 
-	public static void updateScoreboard(Player player) {
+	public void updatePlayerKillCount(Player player) {
+		stats = Main.getPlugin().getStatsManager().getStats(player.getUniqueId());
+		Scoreboard scoreboard = player.getScoreboard();
+		Team kills = scoreboard.getTeam("kills");
+		kills.setSuffix(ChatColor.YELLOW + Integer.toString(stats.getKills()));
 	}
 
-	public static void removeScoreboard(Player player) {
-		player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+	public void updatePlayerStreakCount(Player player) {
+		stats = Main.getPlugin().getStatsManager().getStats(player.getUniqueId());
+		Scoreboard scoreboard = player.getScoreboard();
+		Team streak = scoreboard.getTeam("streak");
+		streak.setSuffix(ChatColor.YELLOW + Integer.toString(stats.getStreak()));
+	}
+
+	public void updatePlayerDeathCount(Player player) {
+		stats = Main.getPlugin().getStatsManager().getStats(player.getUniqueId());
+		Scoreboard scoreboard = player.getScoreboard();
+		Team deaths = scoreboard.getTeam("deaths");
+		deaths.setSuffix(ChatColor.YELLOW + Integer.toString(stats.getDeaths()));
 	}
 }

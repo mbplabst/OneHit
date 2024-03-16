@@ -20,10 +20,8 @@ public class StatsManager {
 	}
 
 	public void createStatsFile() {
-
 		if (!statsFile.exists()) {
 			statsFile.getParentFile().mkdirs();
-
 			try {
 				statsFile.createNewFile();
 			} catch (IOException e) {
@@ -47,10 +45,6 @@ public class StatsManager {
 		}
 	}
 
-	public void addDeath(Player player) {
-		incrementStat(player, "death");
-	}
-
 	private void incrementStat(Player player, String stat) {
 		String configPath = "stats." + player.getUniqueId().toString() + "." + stat;
 
@@ -63,10 +57,21 @@ public class StatsManager {
 		ConfigurationSection playerStats = statsConfig.getConfigurationSection("stats." + uuid.toString());
 
 		if (playerStats == null) {
-			return new PlayerStats(uuid, 0, 0);
+			return new PlayerStats(uuid, 0, 0, 0);
 		}
-		return new PlayerStats(uuid, playerStats.getInt("death", 0), playerStats.getInt("kills", 0));
-
+		return new PlayerStats(uuid, playerStats.getInt("death", 0), playerStats.getInt("kill", 0),
+				playerStats.getInt("streak", 0));
 	}
-
+	
+	public void addDeath(Player player) {
+		incrementStat(player, "death");
+	}
+	
+	public void addKill(Player player) {
+		incrementStat(player, "kill");
+	}
+	
+	public void addStreak(Player player) {
+		incrementStat(player, "streak");
+	}
 }

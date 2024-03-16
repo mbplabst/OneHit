@@ -7,11 +7,13 @@ public class PlayerStats {
 	private UUID uuid;
 	private int deaths;
 	private int kills;
+	private int streak;
 
-	public PlayerStats(UUID uuid, int deaths, int kills) {
+	public PlayerStats(UUID uuid, int deaths, int kills, int streak) {
 		this.setUuid(uuid);
 		this.setDeaths(deaths);
 		this.setKills(kills);
+		this.setStreak(streak);
 	}
 
 	public UUID getUuid() {
@@ -36,6 +38,14 @@ public class PlayerStats {
 
 	public void setKills(int kills) {
 		this.kills = kills;
+	}
+
+	public int getStreak() {
+		return streak;
+	}
+
+	public void setStreak(int streak) {
+		this.streak = streak;
 	}
 
 }

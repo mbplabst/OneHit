@@ -6,8 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.fruchtiii.onehit.listener.ControlListener;
-import net.fruchtiii.onehit.listener.GameMechanic;
-import net.fruchtiii.onehit.util.GameManager;
+import net.fruchtiii.onehit.listener.PlayerDeathListener;
+import net.fruchtiii.onehit.listener.PlayerJoinListener;
 import net.fruchtiii.onehit.util.PluginConfig;
 import net.fruchtiii.onehit.util.StatsManager;
 
@@ -16,7 +16,6 @@ public class Main extends JavaPlugin {
 	private static Main plugin;
 	private StatsManager statsManager;
 	private PluginConfig configuration;
-	private GameManager gameManager;
 
 	public void onEnable() {
 		plugin = this;
@@ -24,13 +23,11 @@ public class Main extends JavaPlugin {
 		configuration = new PluginConfig();
 
 		Bukkit.getPluginManager().registerEvents(new ControlListener(), this);
-		Bukkit.getPluginManager().registerEvents(new GameMechanic(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(this), this);
 
 		statsManager = new StatsManager(new File(getDataFolder(), "stats.yml"));
 		statsManager.createStatsFile();
-
-		gameManager = new GameManager();
-		gameManager.startNewGame();
 	}
 
 	public static Main getPlugin() {
