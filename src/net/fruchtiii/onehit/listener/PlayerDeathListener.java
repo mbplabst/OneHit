@@ -1,7 +1,6 @@
 package net.fruchtiii.onehit.listener;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -11,20 +10,22 @@ import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import net.fruchtiii.onehit.main.Main;
+import net.fruchtiii.onehit.util.MessageManager;
 import net.fruchtiii.onehit.util.ScoreboardManager;
 
 public class PlayerDeathListener implements Listener {
 
 	private Main main;
-	private String prefix;
 	private Location spawnLocation;
 	private int minYCoordinate;
 
 	private ScoreboardManager scoreboardManager;
+	private MessageManager messageManager;
 
 	public PlayerDeathListener(Main main) {
 		this.main = main;
-		prefix = main.getConfiguration().getPrefix();
+		scoreboardManager = new ScoreboardManager();
+		messageManager = new MessageManager();
 		spawnLocation = main.getConfiguration().getSpawnLocation();
 		minYCoordinate = main.getConfiguration().getMinYCoordinate();
 	}
@@ -39,11 +40,9 @@ public class PlayerDeathListener implements Listener {
 
 		player.teleport(spawnLocation);
 		player.playSound(spawnLocation, Sound.VILLAGER_DEATH, 1, 1);
-		Bukkit.getServer().broadcastMessage(prefix + ChatColor.RED + player.getName() + " died!");
+		Bukkit.getServer().broadcastMessage(messageManager.sendPlayerFallVoidMessage(player, 0));
 
 		main.getStatsManager().addDeath(player);
-
-		scoreboardManager = new ScoreboardManager();
 		scoreboardManager.updatePlayerDeathCount(player);
 	}
 

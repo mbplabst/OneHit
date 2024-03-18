@@ -3,6 +3,7 @@ package net.fruchtiii.onehit.listener;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,11 +36,12 @@ public class PlayerJoinListener implements Listener {
 				spawnLocation.getBlockZ());
 
 		Player player = event.getPlayer();
+		player.teleport(spawnLocation);
+		player.playSound(spawnLocation, Sound.NOTE_PLING, 1, 1);
 		player.setGameMode(GameMode.SURVIVAL);
 		player.setHealth(20);
 		player.setSaturation(20);
 		player.setExp(0);
-		player.teleport(spawnLocation);
 
 		Inventory inv = player.getInventory();
 		inv.clear();

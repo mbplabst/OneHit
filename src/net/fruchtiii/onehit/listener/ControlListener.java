@@ -1,7 +1,6 @@
 package net.fruchtiii.onehit.listener;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -14,8 +13,6 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class ControlListener implements Listener {
-
-	static Location spawnLocation = new Location(Bukkit.getWorld("world"), 0.5, 150, 0.5, 0, 0);
 
 	@EventHandler
 	public void handleHunger(FoodLevelChangeEvent event) {

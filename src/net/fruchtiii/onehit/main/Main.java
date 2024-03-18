@@ -21,13 +21,12 @@ public class Main extends JavaPlugin {
 		plugin = this;
 
 		configuration = new PluginConfig();
+		statsManager = new StatsManager(new File(getDataFolder(), "stats.yml"));
+		statsManager.createStatsFile();
 
 		Bukkit.getPluginManager().registerEvents(new ControlListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(this), this);
-
-		statsManager = new StatsManager(new File(getDataFolder(), "stats.yml"));
-		statsManager.createStatsFile();
 	}
 
 	public static Main getPlugin() {
