@@ -2,3 +2,5 @@ name: OneHit
 version: 1.0
 main: net.fruchtiii.onehit.main.Main
 commands:
+   stats:
+   admin:
